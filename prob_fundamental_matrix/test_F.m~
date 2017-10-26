@@ -5,7 +5,7 @@ function [inliers,num_inliers] = test_F( F, x1, x2, matches )
 nmatches = size(matches); nmatches = nmatches(1);
 num_inliers = 0;
 inliers = [];
-THRESHOLD = 0.01;
+THRESHOLD = 0.0001;
 
 for match = 1:nmatches
     % Naive question: X'FX < threhold is the condition for inliers (X' X)?
@@ -14,9 +14,9 @@ for match = 1:nmatches
     xp = x2(matches(match,2),:);
 %     result = xp * F * x';
     
-    L = F * xp';
-    d = abs(L(1)*x(1)+L(2)*x(2)+L(3)) / sqrt(x(1)^2+x(2)^2);
-    result = d;
+    L = F * xp;
+    d = abs(
+    
     
     
     

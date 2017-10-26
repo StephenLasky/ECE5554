@@ -29,7 +29,7 @@ for trial_num = 1:ntrials
 
     % get number of inliers
     [inliers,num_inliers] = test_F(F, x1, x2, matches);
-    
+%     disp(num_inliers);
     if num_inliers > best_inlier
         best_inlier = num_inliers;
         best_F = F;

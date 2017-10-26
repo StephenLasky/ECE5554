@@ -27,14 +27,9 @@ function T = normalize( x, y )
 %       0, 1/(std(y)^2), -mean(y);
 %       0, 0, 1];
 
-% Tscale = diag([ 1/std(x), 1/std(y), 1]);
-% Ttranslation = [1 0 -mean(x); 0 1 -mean(y); 0 0 1];
-% T = Tscale * Ttranslation;
-% T = Tscale;
-
 Tscale = diag([ 1/std(x), 1/std(y), 1]);
-Ttranslation = [1 0 -mean(x); 0 1 -mean(y); 0 0 1];
-T = Tscale * Ttranslation;
+Ttranslation = [1 0 -mean(x); 0 1 -mean(y); 0 0 1]
+
 
 
 
