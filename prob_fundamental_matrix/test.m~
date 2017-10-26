@@ -6,19 +6,18 @@ im2 = im2double(imread('chapel01.png'));
 load 'matches.mat';
 
 
-% normalize x1 and x2
-T = normalize(c1, r1)
+% get t to normalize x1 and x2
+T = normalize(c1, r1);
 Tp = normalize(c2, r2);
 
-s = size(r1); s = s(1);
-
+% combine points into 2 nice matrices
 x1 = horzcat(c1, r1);
 x2 = horzcat(c2, r2);
-
 x1(:,3) = 1;
 x2(:,3) = 1;
 
-
+% normalize our new matrices
+s = size(r1); s = s(1);
 for i = 1:s
     v = x1(i,:);
     v = v * T;
@@ -29,33 +28,11 @@ for i = 1:s
     x2(i,:) = v;
 end
 
-% choose 8 random points
-s = size(matches); s = s(1);
-u = zeros(8,3,'double');
-v = zeros(8,3,'double');
-rpts = randperm(s,8);      % need 8 distinct points
-for i = 1:8
-    rpt = rpts(i);
-    pt1 = matches(rpt,1);
-    pt2 = matches(rpt,2);
-    
-    u(i,:) = x1(pt1,:);
-    v(i,:) = x2(pt2,:);
-end
+% ransac goes here
+F,inliers = compute_best_F(x1,x2,50,matches);
 
-% set up matrix A for the 8 point algorithm
-A = zeros(8,9,'double');
-for i = 1:8
-    A(i,1) = v(i,1) * u(i,1);   % x'*x
-    A(i,2) = v(i,1) * u(i,2);   % x'*y
-    A(i,3) = v(i,1);            % x'
-    % y'*x
-    % y'*y
-    % y'
-    % x
-    % y
-    % 1
-end
+% denormalize F
+[F,inliers] = denormalize(F,T,Tp)
 
 
 
