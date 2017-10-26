@@ -7,6 +7,7 @@ im = readImages(folder, 0:50);
 load './tracks.mat';
 
 
+
 figure(2), imagesc(im{1}), hold off, axis image, colormap gray
 hold on, plot(track_x', track_y', 'r')
 figure(3), imagesc(im{end}), hold off, axis image, colormap gray
