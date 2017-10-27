@@ -37,16 +37,50 @@ for kp = 1:n
     end
 end
 
-A = [1 2 3]
+% create the new tracked x and tracked y matrices
+% n = n-ntr;
+% new_track_x = zeros(n,m,'single');
+% new_track_y = zeros(n,m,'single');
+% 
+% tri = 1;
+% i = 1;
+% for kp = 1:n+ntr
+%     if tri <= ntr && kp == to_remove(tri)
+%         tri = tri + 1;
+%     else
+%         new_track_x(i,:) = track_x(kp,:);
+%         new_track_y(i,:) = track_y(kp,:);
+%     end
+%     
+% end
 
+% fill new tracked x and track y matrices with new values
+% track_x = new_track_x;
+% track_y = new_track_y;
 
+valid = ~any(isnan(track_x), 2) & ~any(isnan(track_y), 2); 
 
 D = zeros(2*m,n,'single');
+track_x = track_x(valid, :);
+track_y = track_y(valid, :);
 D = [track_x track_y]';
 
-disp('Program finished.');
+
 
 % step 3: factorize D
-% [U,S,V] = svd(A)
+[U, W, V] = svd(D);
+V = V';
+U3 = U(:,1:3);
+V3 = V(:,1:3);
+W3 = W(1:3,1:3);
 
-% [U, W, V] = svd(D);
+% step 4: create motion (affine) and shape (3D) matrices:
+M = U3 * sqrt(W3);
+S = sqrt(W3) * V3';
+
+A_squigly = U3;
+X_squigly = W3 * V3';
+D_s = A_squigly * X_squigly;
+
+
+disp('Program finished.');
