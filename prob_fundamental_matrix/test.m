@@ -41,19 +41,31 @@ SD = std(x2)
 
 % ransac goes here
 [F,inliers] = compute_best_F(x1,x2,1000,matches)
+io = inliers;
 [inliers, num_inliers] = test_F(F,x1,x2,matches);
 
 % denormalize F
 F = denormalize(F,T,Tp);
 F = F';
+disp(F);
 
 % display epipolar lines
 
 display_epipolar_lines( r1,r2,c1,c2,matches,F,inliers,im1,im2 );
 
+% finally, display inliers and outliers
+figure(); imshow(im1);
+hold on
+match_inliers = matches(inliers);
+
+plot(c1(match_inliers(1,:)),r1(match_inliers(1,:)),'.g');
+% plot(c1(io),r1(io),'.g');
+
+
 % matches = matches(50:100,:);
 % matches = matches(116,:);   % match # 116 is good
 % plotmatches(im1,im2,[c1 r1]', [c2 r2]', matches');
+
 
 
 
