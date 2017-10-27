@@ -66,7 +66,6 @@ track_y = track_y(valid, :);
 D = [track_x track_y]';
 
 
-
 % step 3: factorize D
 [U, W, V] = svd(D);
 V = V';
@@ -75,12 +74,37 @@ V3 = V(:,1:3);
 W3 = W(1:3,1:3);
 
 % step 4: create motion (affine) and shape (3D) matrices:
-M = U3 * sqrt(W3);
+A = U3 * sqrt(W3);
 S = sqrt(W3) * V3';
 
-A_squigly = U3;
-X_squigly = W3 * V3';
-D_s = A_squigly * X_squigly;
+% compute A_squigly?
+A_squigly = zeros(3*m,9,'single');
+% just do for 1 now
+for i = 1:m
+    a = A(i,1); b = A(i,2); c = A(i,3);
+    d = A(i+m,1); e = A(i+m,2); f = A(i+m,3);
+    newr = reshape([ a b c ]'*[ d e f ], [1,9]);
+    A_squigly(3*i-2,:) = newr;
+    A_squigly(3*i-1,:) = newr;
+    A_squigly(3*i,  :) = newr;
+end
+
+% create matrix b
+b = ones(3*m, 1, 'single');
+for i = 1:m
+    b(3*i,1) = 0;
+end
+
+size(A_squigly)
+size(b)
+L = reshape(A_squigly\b,[3,3]);
+
+
+% C = zeros(3,3,'single'); C(1,1) = 1; C(2,2) = 1; C(3,3) = 1;    % arbitrary invertible C
+% A_squigly = A_squigly * C;
+% X_squigly = C^(-1) * X_squigly;
+% 
+% D_s = A_squigly * X_squigly;
 
 
 disp('Program finished.');
