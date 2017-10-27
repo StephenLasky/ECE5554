@@ -1,11 +1,13 @@
-function [inliers,num_inliers] = test_F( F, x1, x2, matches )
+function [inliers,num_inliers,outliers,num_outliers] = test_F( F, x1, x2, matches )
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
 
 nmatches = size(matches); nmatches = nmatches(1);
 num_inliers = 0;
+num_outliers = 0;
 inliers = [];
-THRESHOLD = 0.01;
+outliers = [];
+THRESHOLD = 0.1;
 
 for match = 1:nmatches
     % Naive question: X'FX < threhold is the condition for inliers (X' X)?
@@ -24,6 +26,9 @@ for match = 1:nmatches
     if result < THRESHOLD
         num_inliers = num_inliers + 1;
         inliers(num_inliers) = match;
+    else
+        num_outliers = num_outliers + 1;
+        outliers(num_outliers) = match;
     end
 end
 

@@ -69,21 +69,7 @@ for i = 1:m
     newr = reshape([a b c]'*[d e f], [1,9]);
     A_squigly(3*i,:) = newr;
     
-%     A_squigly(3*i-1,:) = newr;
-%     A_squigly(3*i-2,:) = newr;
 end
-
-% try atharva method
-% k = 1;
-% for i = 1:m
-%     A_squigly(k,:) = reshape(A(i,:)' * A(i,:), [1,9]);
-%     k = k+1;
-%     A_squigly(k,:) = reshape(A(i+m,:)' * A(i+m,:), [1,9]);
-%     k = k+1;
-%     A_squigly(k,:) = reshape(A(i,:)' * A(i+m,:), [1,9]);
-%     k = k+1;
-% end
-
 
 % create matrix b
 b = ones(3*m, 1, 'single');
